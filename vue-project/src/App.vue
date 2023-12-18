@@ -3,37 +3,36 @@
 </template>
 
 <script setup>
-const blob = new Blob(["Hello world"])
+let objA = {
+  name: "Li Ming",
+  score: [80, 60, 90],
+  select: function () {
+    return this.name
+  },
+  age: undefined,
+}
 
-const buffer = new ArrayBuffer(blob)
+function deepCopy(obj) {
+  // 对于非对象和null值，直接返回
+  if (obj === null || typeof obj !== "object") return obj
 
-window.console.log(blob)
+  // 根据obj的类型来决定新创建对象的类型
+  let copy = Array.isArray(obj) ? [] : {}
 
-// const wrapBuffer = new Int8Array(buffer)
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      // 递归调用deepCopy处理每个属性
+      copy[key] = deepCopy(obj[key])
+    }
+  }
 
-// const Hello = [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+  return copy
+}
 
-// const buffer = new ArrayBuffer(Hello.length)
+let objB = deepCopy(objA)
 
-// const wrapBuffer = new Int8Array(buffer)
+objA.select = "888"
 
-// for (let i = 0; i < Hello.length; i++) {
-//   wrapBuffer[i] = Hello[i]
-// }
-
-// const blob = new Blob([buffer])
-
-// const reader = new FileReader()
-
-// reader.readAsText(blob)
-
-// window.console.log(reader)
+window.console.log(objA) // { name: "Li Ming", score: [80, 60, 90], select: ƒ, age: undefined }
+window.console.log(objB) // { name: "Li Ming", score: [80, 60, 90] }
 </script>
-
-<style scoped>
-/* #cake {
-  width: 200px;
-  height: 200px;
-  border: 1px solid black;
-} */
-</style>
