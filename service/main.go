@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	_ "github.com/zequanr/HeavyRain/driver"
 	"github.com/zequanr/HeavyRain/routers"
 )
 

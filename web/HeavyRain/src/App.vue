@@ -20,6 +20,7 @@ const res = () => {
   <main>
     <TheWelcome />
   </main> -->
+  <h1>Hello world!</h1>
 
   <button @click="res">Hello World</button>
 </template>

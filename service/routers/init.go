@@ -8,5 +8,7 @@ import (
 func Init(r *gin.Engine) {
 	v1 := r.Group("/api/v1")
 
-	v1.POST("/login", controller.DoctorLogin)
+	{
+		v1.POST("/login", controller.DoctorLogin)
+	}
 }

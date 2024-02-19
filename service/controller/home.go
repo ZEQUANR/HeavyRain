@@ -14,7 +14,7 @@ func DoctorLogin(c *gin.Context) {
 	}
 
 	if err := c.BindJSON(&data); err != nil {
-		fmt.Println(data)
+		fmt.Println(err)
 		return
 	}
 
