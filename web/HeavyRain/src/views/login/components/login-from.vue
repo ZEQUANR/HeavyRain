@@ -62,12 +62,12 @@ import { ref, reactive } from "vue"
 import { useRouter } from "vue-router"
 import { Message } from "@arco-design/web-vue"
 import { useStorage } from "@vueuse/core"
-// import { useUserStore } from "@/store"
+import { useUserStore } from "@/store"
 import useLoading from "@/hook/loading"
 
 const router = useRouter()
 const errorMessage = ref("")
-// const userStore = useUserStore()
+const userStore = useUserStore()
 
 const loginConfig = useStorage("login-config", {
   rememberPassword: true,
@@ -81,12 +81,12 @@ const userInfo = reactive({
 })
 
 const { loading, setLoading } = useLoading()
-const handleSubmit = async (errors, values) => {
+const handleSubmit = async ({ errors, values }) => {
   if (loading.value) return
   if (!errors) {
     setLoading(true)
     try {
-      //   await userStore.login(values)
+      await userStore.login(values)
       const { redirect, ...othersQuery } = router.currentRoute.value.query
       router.push({
         name: redirect || "registered",
