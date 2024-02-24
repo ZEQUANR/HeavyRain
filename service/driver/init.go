@@ -1,4 +1,4 @@
-package dirver
+package driver
 
 func init() {
 	initMysql()

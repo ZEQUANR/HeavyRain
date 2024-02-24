@@ -1,4 +1,4 @@
-package dirver
+package driver
 
 import (
 	"fmt"
@@ -20,16 +20,22 @@ const (
 var conn *gorm.DB
 
 func initMysql() {
+	var (
+		err error
+	)
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/?charset=%s&parseTime=True&loc=Local", MysqlUser, MysqlPassword, MysqlHost, MysqlPort, charset)
 
-	if conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{}); err != nil {
+	conn, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
 		panic(err)
-	} else {
-		conn.Exec("CREATE DATABASE IF NOT EXISTS " + Database + " DEFAULT CHARACTER SET " + charset)
-		conn.Exec("USE " + Database)
-
-		conn.AutoMigrate(&table.User{})
 	}
+
+	conn.Exec("CREATE DATABASE IF NOT EXISTS " + Database + " DEFAULT CHARACTER SET " + charset)
+	conn.Exec("USE " + Database)
+
+	conn.AutoMigrate(&table.User{})
+
 }
 
 func GetDBConnection() *gorm.DB {

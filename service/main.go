@@ -19,11 +19,5 @@ func main() {
 
 	routers.Init(r)
 
-	// r.POST("/ping", func(c *gin.Context) {
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"message": "pong",
-	// 	})
-	// })
-
 	r.Run(":6145") // 监听并在 0.0.0.0:8080 上启动服务
 }
