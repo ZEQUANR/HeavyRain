@@ -13,3 +13,13 @@ func QueryUserByName(name string) (*table.User, error) {
 
 	return result, nil
 }
+
+// func QueryUserPermissionsByID(userID uint) (*table.User, error) {
+// 	user := &table.User{}
+
+// 	if err := dbConn.Model(user).Select("").Where("id = ?", userID).First(&user).Error; err != nil {
+// 		return nil, err
+// 	}
+
+// 	return user, nil
+// }
