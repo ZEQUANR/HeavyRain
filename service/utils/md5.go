@@ -7,7 +7,6 @@ import (
 )
 
 func Md5Check(content, encrypted string) bool {
-	// fmt.Println(content, Md5Encode(content), encrypted)
 	return strings.EqualFold(Md5Encode(content), encrypted)
 }
 

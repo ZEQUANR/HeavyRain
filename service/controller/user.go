@@ -26,14 +26,6 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	// if !service.UserNameIsExists(user.Account) {
-	// 	c.JSON(497, &gin.H{
-	// 		"message": "User does not exist",
-	// 	})
-
-	// 	return
-	// }
-
 	// 查询用户信息
 	result, err := service.QueryUserByName(user.Account)
 	if err != nil {
@@ -45,8 +37,6 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(result)
-
 	// 检查密码是否正确
 	if !utils.Md5Check(user.Password, result.Password) {
 		c.JSON(497, &gin.H{
@@ -56,8 +46,18 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &gin.H{
-		"message": "OK",
-	})
+	// 创建 JWT
+	token, err := utils.GenerateToken(result.ID, result.Role)
+	if err != nil {
+		// middlewares.LogError(c, err)
+		c.JSON(http.StatusForbidden, &gin.H{
+			"message": "Failed to apply for token",
+		})
 
+		return
+	}
+
+	c.JSON(http.StatusOK, &gin.H{
+		"token": token,
+	})
 }
