@@ -20,7 +20,7 @@
   &-text {
     margin-right: 4px;
     margin-left: 4px;
-    color: var(--color-neutral-10);
+    color: white;
     font-size: 20px;
   }
 }

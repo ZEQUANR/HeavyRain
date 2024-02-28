@@ -18,18 +18,16 @@ const useUserStore = defineStore("user", {
   },
 
   actions: {
+    // 获取用户信息
+    async info() {
+      // const res = await getUserInfo();
+      // this.setInfo(res.data);
+    },
     // 登陆
     async login(loginForm) {
       try {
         const res = await userLogin(loginForm)
-
-        if (res.status === 200) {
-          this.userId = res.data.id
-          this.account = res.data.account
-          this.role = res.data.role
-
-          setToken(res.data.token)
-        }
+        setToken(res.data.token)
       } catch (err) {
         clearToken()
         throw err
@@ -52,12 +50,6 @@ const useUserStore = defineStore("user", {
     // 重置用户信息
     resetInfo() {
       //   this.$reset()
-    },
-
-    // 获取用户信息
-    async info() {
-      // const res = await getUserInfo();
-      // this.setInfo(res.data);
     },
 
     // 注销

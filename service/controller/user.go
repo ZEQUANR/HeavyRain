@@ -15,6 +15,7 @@ func UserLogin(c *gin.Context) {
 		Password string `json:"password" binding:"required"`
 	}
 
+	// 查询请求参数是否有误
 	if err := c.BindJSON(&user); err != nil {
 		// middlewares.LogError(c, err)
 		fmt.Println(err)
@@ -58,9 +59,10 @@ func UserLogin(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &gin.H{
-		"id":      result.ID,
-		"account": result.Account,
-		"role":    result.Role,
-		"token":   token,
+		"token": token,
 	})
+}
+
+func UserInfo(c *gin.Context) {
+	fmt.Println(utils.ExtractTokenID(c))
 }

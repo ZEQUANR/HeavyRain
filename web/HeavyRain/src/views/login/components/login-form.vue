@@ -1,6 +1,8 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">登录</div>
+    <div class="login-form-title">{{ "登录" }}</div>
+    <div class="login-form-sub-title">{{ "登录 Arco Design Pro" }}</div>
+    <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
       :model="userInfo"
@@ -47,10 +49,13 @@
           >
             {{ "记住密码" }}
           </a-checkbox>
+          <a-link>{{ "忘记密码" }}</a-link>
         </div>
-
         <a-button type="primary" html-type="submit" long>
           {{ "登录" }}
+        </a-button>
+        <a-button type="text" long class="login-form-register-btn">
+          {{ "注册账号" }}
         </a-button>
       </a-space>
     </a-form>
@@ -114,28 +119,38 @@ const setRememberPassword = (value) => {
 </script>
 
 <style lang="less" scoped>
-.login-form {
-  &-wrapper {
-    width: 320px;
-  }
+  .login-form {
+    &-wrapper {
+      width: 320px;
+    }
 
-  &-title {
-    color: var(--color-text-1);
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 32px;
-    margin-bottom: 16px;
-  }
+    &-title {
+      color: var(--color-text-1);
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 32px;
+    }
 
-  &-error-msg {
-    height: 32px;
-    color: rgb(var(--red-6));
-    line-height: 32px;
-  }
+    &-sub-title {
+      color: var(--color-text-3);
+      font-size: 16px;
+      line-height: 24px;
+    }
 
-  &-password-actions {
-    display: flex;
-    justify-content: space-between;
+    &-error-msg {
+      height: 32px;
+      color: rgb(var(--red-6));
+      line-height: 32px;
+    }
+
+    &-password-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &-register-btn {
+      color: var(--color-text-3) !important;
+    }
   }
-}
 </style>
+

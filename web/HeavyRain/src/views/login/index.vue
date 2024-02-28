@@ -1,64 +1,51 @@
 <template>
   <div class="container">
-    <LoginIcon></LoginIcon>
-    <div class="banner">
-      <div class="banner-inner">
-        <LoginBanner />
-      </div>
-    </div>
+    <LoginIcon/>
+    <LoginBanner />
     <div class="content">
       <div class="content-inner">
         <LoginForm />
       </div>
       <div class="footer">
-        <LoginFooter />
+        <Footer />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import LoginIcon from "./components/login-icon.vue"
-import LoginBanner from "./components/login-banner.vue"
-import LoginForm from "./components/login-from.vue"
-import LoginFooter from "./components/login-footer.vue"
+  import Footer from './components/login-footer.vue';
+  import LoginBanner from './components/login-banner.vue';
+  import LoginForm from './components/login-form.vue';
+  import LoginIcon from './components/login-icon.vue';
 </script>
 
 <style lang="less" scoped>
-.container {
-  display: flex;
-  height: 100vh;
-
-  .banner {
+  .container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 550px;
-    // background: url(../../assets/images/login-banner.png);
-    background-size: 100% 100%;
+    height: 100vh;
 
-    &-inner {
+    .banner {
+      width: 550px;
+      background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
+    }
+
+    .content {
+      position: relative;
+      display: flex;
       flex: 1;
-      height: 100%;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 40px;
+    }
+
+    .footer {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 100%;
     }
   }
-
-  .content {
-    position: relative;
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 40px;
-  }
-
-  .footer {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-  }
-}
 </style>
 
 <style lang="less" scoped>

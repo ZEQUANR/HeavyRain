@@ -28,19 +28,17 @@ func GenerateToken(userID uint, role string) (string, error) {
 func ExtractToken(c *gin.Context) string {
 	token := c.Query("token")
 	if token != "" {
-		return strings.Split(token, "&&")[0]
+		return token
 	}
-
 	bearerToken := c.Request.Header.Get("Authorization")
 	if len(strings.Split(bearerToken, " ")) == 2 {
-		s := strings.Split(bearerToken, " ")[1]
-		return strings.Split(s, "&&")[0]
+		return strings.Split(bearerToken, " ")[1]
 	}
 
 	return ""
 }
 
-func ExtractTokenID(c *gin.Context) (uint, int, error) {
+func ExtractTokenID(c *gin.Context) (uint, string, error) {
 	tokenString := ExtractToken(c)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -51,24 +49,24 @@ func ExtractTokenID(c *gin.Context) (uint, int, error) {
 	})
 
 	if err != nil {
-		return 0, 0, err
+		return 0, "", err
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok && token.Valid {
 		userID, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims["user_id"]), 10, 32)
 		if err != nil {
-			return 0, 0, err
+			return 0, "", err
 		}
 
-		unit, err := strconv.ParseInt(fmt.Sprintf("%.0f", claims["unit"]), 10, 32)
-		if err != nil {
-			return 0, 0, err
+		if claims["role"] == nil {
+			return 0, "", fmt.Errorf("token field [role] parsing failure")
 		}
 
-		return uint(userID), int(unit), nil
+		role := fmt.Sprintf("%s", claims["role"])
+		return uint(userID), role, err
 	}
-	return 0, 0, nil
+	return 0, "", nil
 }
 
 func TokenValid(c *gin.Context) error {
