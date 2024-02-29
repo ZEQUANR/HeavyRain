@@ -12,13 +12,12 @@ import (
 
 const secret = "Jerry"
 
-func GenerateToken(userID uint, role string) (string, error) {
+func GenerateToken(userID uint) (string, error) {
 	const tokenExpireDuration = time.Hour * 24
 
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = userID
-	claims["role"] = role
 	claims["exp"] = time.Now().Add(tokenExpireDuration).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
@@ -38,7 +37,7 @@ func ExtractToken(c *gin.Context) string {
 	return ""
 }
 
-func ExtractTokenID(c *gin.Context) (uint, string, error) {
+func ExtractTokenID(c *gin.Context) (uint, error) {
 	tokenString := ExtractToken(c)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -49,24 +48,20 @@ func ExtractTokenID(c *gin.Context) (uint, string, error) {
 	})
 
 	if err != nil {
-		return 0, "", err
+		return 0, err
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok && token.Valid {
 		userID, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims["user_id"]), 10, 32)
 		if err != nil {
-			return 0, "", err
+			return 0, err
 		}
 
-		if claims["role"] == nil {
-			return 0, "", fmt.Errorf("token field [role] parsing failure")
-		}
-
-		role := fmt.Sprintf("%s", claims["role"])
-		return uint(userID), role, err
+		return uint(userID), nil
 	}
-	return 0, "", nil
+
+	return 0, nil
 }
 
 func TokenValid(c *gin.Context) error {

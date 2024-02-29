@@ -8,8 +8,7 @@ import (
 )
 
 const (
-	ContextKeyUserID   = "custom-user-id"
-	ContextKeyUserRole = "Custom-user-role"
+	ContextKeyUserID = "custom-user-id"
 )
 
 func JwtAuthMiddleware() gin.HandlerFunc {
@@ -21,7 +20,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		id, role, err := utils.ExtractTokenID(c)
+		id, err := utils.ExtractTokenID(c)
 		if err != nil {
 			c.String(http.StatusUnauthorized, "message: Extract token name fail")
 			c.Abort()
@@ -29,7 +28,6 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set(ContextKeyUserID, id)
-		c.Set(ContextKeyUserRole, role)
 
 		c.Next()
 	}

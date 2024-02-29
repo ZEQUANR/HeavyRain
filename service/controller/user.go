@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,8 +17,6 @@ func UserLogin(c *gin.Context) {
 	// 查询请求参数是否有误
 	if err := c.BindJSON(&user); err != nil {
 		// middlewares.LogError(c, err)
-		fmt.Println(err)
-
 		c.JSON(http.StatusBadRequest, &gin.H{
 			"message": "Invalid Parameter",
 		})
@@ -48,7 +45,7 @@ func UserLogin(c *gin.Context) {
 	}
 
 	// 创建 JWT
-	token, err := utils.GenerateToken(result.ID, result.Role)
+	token, err := utils.GenerateToken(result.ID)
 	if err != nil {
 		// middlewares.LogError(c, err)
 		c.JSON(http.StatusForbidden, &gin.H{
@@ -64,5 +61,29 @@ func UserLogin(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-	fmt.Println(utils.ExtractTokenID(c))
+	userID, err := utils.ExtractTokenID(c)
+	if err != nil {
+		// middlewares.LogError(c, err)
+		c.JSON(http.StatusForbidden, &gin.H{
+			"message": "Extract token name fail",
+		})
+
+		return
+	}
+
+	result, err := service.QueryUserByID(userID)
+	if err != nil {
+		// middlewares.LogError(c, err)
+		c.JSON(http.StatusForbidden, &gin.H{
+			"message": "Failed to apply for token",
+		})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, &gin.H{
+		"user_id": userID,
+		"account": result.Account,
+		"role":    result.Role,
+	})
 }

@@ -14,12 +14,12 @@ func QueryUserByName(name string) (*table.User, error) {
 	return result, nil
 }
 
-// func QueryUserPermissionsByID(userID uint) (*table.User, error) {
-// 	user := &table.User{}
+func QueryUserByID(userID uint) (*table.User, error) {
+	result := &table.User{}
 
-// 	if err := dbConn.Model(user).Select("").Where("id = ?", userID).First(&user).Error; err != nil {
-// 		return nil, err
-// 	}
+	if err := dbConn.Model(result).Select("id", "account", "role").Where("id = ?", userID).First(&result).Error; err != nil {
+		return nil, err
+	}
 
-// 	return user, nil
-// }
+	return result, nil
+}
