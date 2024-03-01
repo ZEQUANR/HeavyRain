@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">{{ "登录" }}</div>
-    <div class="login-form-sub-title">{{ "登录 Arco Design Pro" }}</div>
+    <div class="login-form-title">{{ '登录' }}</div>
+    <div class="login-form-sub-title">{{ '登录 Arco Design Pro' }}</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -47,15 +47,15 @@
             :model-value="loginConfig.rememberPassword"
             @change="setRememberPassword"
           >
-            {{ "记住密码" }}
+            {{ '记住密码' }}
           </a-checkbox>
-          <a-link>{{ "忘记密码" }}</a-link>
+          <a-link>{{ '忘记密码' }}</a-link>
         </div>
         <a-button type="primary" html-type="submit" long>
-          {{ "登录" }}
+          {{ '登录' }}
         </a-button>
         <a-button type="text" long class="login-form-register-btn">
-          {{ "注册账号" }}
+          {{ '注册账号' }}
         </a-button>
       </a-space>
     </a-form>
@@ -63,59 +63,59 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue"
-import { useRouter } from "vue-router"
-import { Message } from "@arco-design/web-vue"
-import { useStorage } from "@vueuse/core"
-import { useUserStore } from "@/store"
-import useLoading from "@/hook/loading"
+  import { ref, reactive } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { Message } from '@arco-design/web-vue';
+  import { useStorage } from '@vueuse/core';
+  import { useUserStore } from '@/store';
+  import useLoading from '@/hooks/loading';
 
-const router = useRouter()
-const errorMessage = ref("")
-const userStore = useUserStore()
+  const router = useRouter();
+  const errorMessage = ref('');
+  const userStore = useUserStore();
 
-const loginConfig = useStorage("login-config", {
-  rememberPassword: true,
-  account: "",
-  password: "",
-})
+  const loginConfig = useStorage('login-config', {
+    rememberPassword: true,
+    account: '',
+    password: '',
+  });
 
-const userInfo = reactive({
-  account: loginConfig.value.account,
-  password: loginConfig.value.password,
-})
+  const userInfo = reactive({
+    account: loginConfig.value.account,
+    password: loginConfig.value.password,
+  });
 
-const { loading, setLoading } = useLoading()
-const handleSubmit = async ({ errors, values }) => {
-  if (loading.value) return
-  if (!errors) {
-    setLoading(true)
-    try {
-      await userStore.login(values)
-      const { redirect, ...othersQuery } = router.currentRoute.value.query
-      router.push({
-        name: redirect || "home",
-        query: {
-          ...othersQuery,
-        },
-      })
-      Message.success("欢迎使用")
-      const { rememberPassword } = loginConfig.value
-      const { account, password } = values
-      // 实际生产环境需要进行加密存储。
-      // The actual production environment requires encrypted storage.
-      loginConfig.value.account = rememberPassword ? account : ""
-      loginConfig.value.password = rememberPassword ? password : ""
-    } catch (err) {
-      errorMessage.value = err.message
-    } finally {
-      setLoading(false)
+  const { loading, setLoading } = useLoading();
+  const handleSubmit = async ({ errors, values }) => {
+    if (loading.value) return;
+    if (!errors) {
+      setLoading(true);
+      try {
+        await userStore.login(values);
+        const { redirect, ...othersQuery } = router.currentRoute.value.query;
+        router.push({
+          name: redirect || 'home',
+          query: {
+            ...othersQuery,
+          },
+        });
+        Message.success('欢迎使用');
+        const { rememberPassword } = loginConfig.value;
+        const { account, password } = values;
+        // 实际生产环境需要进行加密存储。
+        // The actual production environment requires encrypted storage.
+        loginConfig.value.account = rememberPassword ? account : '';
+        loginConfig.value.password = rememberPassword ? password : '';
+      } catch (err) {
+        errorMessage.value = err.message;
+      } finally {
+        setLoading(false);
+      }
     }
-  }
-}
-const setRememberPassword = (value) => {
-  loginConfig.value.rememberPassword = value
-}
+  };
+  const setRememberPassword = (value) => {
+    loginConfig.value.rememberPassword = value;
+  };
 </script>
 
 <style lang="less" scoped>
@@ -153,4 +153,3 @@ const setRememberPassword = (value) => {
     }
   }
 </style>
-
