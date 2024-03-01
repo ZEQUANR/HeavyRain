@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zequanr/HeavyRain/middlewares"
 	"github.com/zequanr/HeavyRain/service"
 	"github.com/zequanr/HeavyRain/utils"
 )
@@ -61,28 +62,20 @@ func UserLogin(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-	userID, err := utils.ExtractTokenID(c)
-	if err != nil {
-		// middlewares.LogError(c, err)
-		c.JSON(http.StatusForbidden, &gin.H{
-			"message": "Extract token name fail",
-		})
-
-		return
-	}
+	userID := c.GetUint(middlewares.ContextKeyUserID)
 
 	result, err := service.QueryUserByID(userID)
 	if err != nil {
 		// middlewares.LogError(c, err)
 		c.JSON(http.StatusForbidden, &gin.H{
-			"message": "Failed to apply for token",
+			"message": "UserInfo fails to be queried. Procedure",
 		})
 
 		return
 	}
 
 	c.JSON(http.StatusOK, &gin.H{
-		"user_id": userID,
+		"userId":  userID,
 		"account": result.Account,
 		"role":    result.Role,
 	})

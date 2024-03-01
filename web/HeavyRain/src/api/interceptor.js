@@ -1,4 +1,5 @@
 import axios from "axios"
+import { getToken } from "@/utils/auth"
 
 if (import.meta.env.VITE_API_BASE_URL) {
   axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
@@ -8,6 +9,13 @@ if (import.meta.env.VITE_API_BASE_URL) {
 axios.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
+    const token = getToken()
+    if (token) {
+      if (!config.headers) {
+        config.headers = {}
+      }
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   (error) => {

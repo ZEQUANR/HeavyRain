@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
-import { userLogin } from "@/api/use"
+import { userLogin, userInfo } from "@/api/use"
 import { setToken, clearToken } from "@/utils/auth"
-// import { removeRouteListener } from "@/utils/route-listener"
+import { removeRouteListener } from "@/utils/route-listener"
 // import useAppStore from "../app"
 
 const useUserStore = defineStore("user", {
@@ -18,11 +18,6 @@ const useUserStore = defineStore("user", {
   },
 
   actions: {
-    // 获取用户信息
-    async info() {
-      // const res = await getUserInfo();
-      // this.setInfo(res.data);
-    },
     // 登陆
     async login(loginForm) {
       try {
@@ -33,6 +28,33 @@ const useUserStore = defineStore("user", {
         throw err
       }
     },
+    // 获取用户信息
+    async info() {
+      const res = await userInfo()
+      this.setInfo(res.data)
+    },
+    // 设置用户信息
+    setInfo(partial) {
+      this.$patch(partial)
+    },
+    // 注销
+    async logout() {
+      try {
+        // await userLogout();
+      } finally {
+        this.logoutCallBack()
+      }
+    },
+    // 注销 函数的回调
+    logoutCallBack() {
+      this.resetInfo()
+      clearToken()
+      removeRouteListener()
+    },
+    // 重置用户信息
+    resetInfo() {
+      this.$reset()
+    },
 
     // 切换角色
     switchRoles() {
@@ -40,35 +62,6 @@ const useUserStore = defineStore("user", {
       //     this.role = this.role === "user" ? "admin" : "user"
       //     resolve(this.role)
       //   })
-    },
-
-    // 设置用户信息
-    setInfo(partial) {
-      //   this.$patch(partial)
-    },
-
-    // 重置用户信息
-    resetInfo() {
-      //   this.$reset()
-    },
-
-    // 注销
-    async logout() {
-      //   try {
-      //     // await userLogout();
-      //   } finally {
-      //     this.logoutCallBack()
-      //   }
-    },
-
-    // 注销 函数的回调
-    logoutCallBack() {
-      //   const appStore = useAppStore()
-      //   this.resetInfo()
-      //   clearToken()
-      //   localStorage.removeItem("userInfo")
-      //   removeRouteListener()
-      //   appStore.clearServerMenu()
     },
   },
 })
