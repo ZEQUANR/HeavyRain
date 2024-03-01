@@ -1,11 +1,10 @@
 <template>
-    <div>
-        {{ userStore }}
-    </div>
+  <div>
+    {{ userStore.role }}
+  </div>
 </template>
 
 <script setup>
-import { useUserStore } from "@/store"
-const userStore = useUserStore()
-
+  import { useUserStore } from '@/store';
+  const userStore = useUserStore();
 </script>
