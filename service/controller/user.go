@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,37 @@ import (
 	"github.com/zequanr/HeavyRain/service"
 	"github.com/zequanr/HeavyRain/utils"
 )
+
+func UserRegister(c *gin.Context) {
+	var user struct {
+		Account         string `json:"account" binding:"required"`
+		Password        string `json:"password" binding:"required"`
+		ConfirmPassword string `json:"confirmPassword" binding:"required"`
+		Email           string `json:"email" binding:"required"`
+	}
+
+	if err := c.BindJSON(&user); err != nil {
+		// middlewares.LogError(c, err)
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "Invalid Parameter",
+		})
+
+		return
+	}
+
+	if service.QueryUserExist(user.Account) {
+		// middlewares.LogError(c, err)
+		c.JSON(http.StatusBadRequest, &gin.H{
+			"message": "The current user already exists",
+		})
+
+		return
+	}
+
+	fmt.Println(service.QueryUserExist(user.Account))
+
+	c.JSON(http.StatusOK, &gin.H{})
+}
 
 func UserLogin(c *gin.Context) {
 	var user struct {

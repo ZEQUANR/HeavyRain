@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	MysqlHost     = "127.0.0.1"
+	MysqlHost     = "10.0.1.253"
 	MysqlPort     = "3306"
 	MysqlUser     = "root"
 	MysqlPassword = "123456"
