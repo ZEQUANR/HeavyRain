@@ -1,65 +1,174 @@
 <template>
-  <div class="login-form-wrapper">
-    <div class="login-form-title">{{ '登录' }}</div>
-    <div class="login-form-sub-title">{{ '登录 Arco Design Pro' }}</div>
-    <div class="login-form-error-msg">{{ errorMessage }}</div>
-    <a-form
-      ref="loginForm"
-      :model="userInfo"
-      class="login-form"
-      layout="vertical"
-      @submit="handleSubmit"
-    >
-      <a-form-item
-        field="account"
-        :rules="[{ required: true, message: '用户名不能为空' }]"
-        :validate-trigger="['change', 'blur']"
-        hide-label
+  <a-tabs default-active-key="1">
+    <a-tab-pane key="1">
+      <template #title> <div style="font-size: 24px">登录</div> </template>
+      <a-form
+        ref="loginForm"
+        :model="userInfo"
+        class="login-form"
+        layout="vertical"
+        @submit="loginHandleSubmit"
       >
-        <a-input v-model="userInfo.account" :placeholder="'用户名'">
-          <template #prefix>
-            <icon-user />
-          </template>
-        </a-input>
-      </a-form-item>
-
-      <a-form-item
-        field="password"
-        :rules="[{ required: true, message: '密码不能为空' }]"
-        :validate-trigger="['change', 'blur']"
-        hide-label
-      >
-        <a-input-password
-          v-model="userInfo.password"
-          :placeholder="'密码'"
-          allow-clear
+        <a-form-item
+          field="account"
+          :rules="[{ required: true, message: '用户名不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
         >
-          <template #prefix>
-            <icon-lock />
-          </template>
-        </a-input-password>
-      </a-form-item>
+          <a-input v-model="userInfo.account" :placeholder="'用户名'">
+            <template #prefix>
+              <icon-user />
+            </template>
+          </a-input>
+        </a-form-item>
 
-      <a-space :size="16" direction="vertical">
-        <div class="login-form-password-actions">
-          <a-checkbox
-            checked="rememberPassword"
-            :model-value="loginConfig.rememberPassword"
-            @change="setRememberPassword"
+        <a-form-item
+          field="password"
+          :rules="[{ required: true, message: '密码不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input-password
+            v-model="userInfo.password"
+            :placeholder="'密码'"
+            allow-clear
           >
-            {{ '记住密码' }}
-          </a-checkbox>
-          <a-link>{{ '忘记密码' }}</a-link>
-        </div>
-        <a-button type="primary" html-type="submit" long>
-          {{ '登录' }}
-        </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          {{ '注册账号' }}
-        </a-button>
-      </a-space>
-    </a-form>
-  </div>
+            <template #prefix>
+              <icon-lock />
+            </template>
+          </a-input-password>
+        </a-form-item>
+
+        <a-space :size="16" direction="vertical">
+          <div class="login-form-password-actions">
+            <a-checkbox
+              checked="rememberPassword"
+              :model-value="loginConfig.rememberPassword"
+              @change="setRememberPassword"
+            >
+              {{ '记住密码' }}
+            </a-checkbox>
+            <a-link>{{ '忘记密码' }}</a-link>
+          </div>
+          <a-button type="primary" html-type="submit" long>
+            {{ '登录' }}
+          </a-button>
+          <a-button
+            type="text"
+            long
+            class="login-form-register-btn"
+            @click="isRegister = !isRegister"
+          >
+            {{ '注册账号' }}
+          </a-button>
+        </a-space>
+      </a-form>
+    </a-tab-pane>
+    <a-tab-pane key="2">
+      <template #title> <div style="font-size: 24px">注册</div> </template>
+      <a-form
+        ref="registerForm"
+        :model="registerInfo"
+        class="login-form"
+        layout="vertical"
+        @submit="registerHandleSubmit"
+      >
+        <a-form-item
+          field="account"
+          :rules="[{ required: true, message: '用户名不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input v-model="registerInfo.account" :placeholder="'用户名'">
+            <template #prefix>
+              <icon-user />
+            </template>
+          </a-input>
+        </a-form-item>
+
+        <a-form-item
+          field="password"
+          :rules="[{ required: true, message: '密码是必需的' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input-password
+            v-model="registerInfo.password"
+            :placeholder="'密码'"
+            allow-clear
+          >
+            <template #prefix>
+              <icon-lock />
+            </template>
+          </a-input-password>
+        </a-form-item>
+
+        <a-form-item
+          field="confirmPassword"
+          :rules="[
+            {
+              required: true,
+              message: '密码是必需的',
+            },
+            {
+              validator: (value, cb) => {
+                if (value !== registerInfo.password) {
+                  cb('两个密码不匹配');
+                } else {
+                  cb();
+                }
+              },
+            },
+          ]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input-password
+            v-model="registerInfo.confirmPassword"
+            :placeholder="'确认密码'"
+            allow-clear
+          >
+            <template #prefix>
+              <icon-lock />
+            </template>
+          </a-input-password>
+        </a-form-item>
+
+        <a-form-item
+          field="email"
+          :rules="[{ type: 'email', required: true, message: '邮箱是必须的' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <a-input
+            v-model="registerInfo.email"
+            :placeholder="'邮箱'"
+            allow-clear
+          >
+            <template #prefix>
+              <icon-email />
+            </template>
+          </a-input>
+        </a-form-item>
+
+        <a-space :size="16" direction="vertical">
+          <div class="login-form-password-actions">
+            <a-checkbox
+              checked="rememberPassword"
+              :model-value="loginConfig.rememberPassword"
+              @change="setRememberPassword"
+            >
+              {{ '记住密码' }}
+            </a-checkbox>
+            <a-link>{{ '忘记密码' }}</a-link>
+          </div>
+          <a-button type="primary" html-type="submit" long>
+            {{ '注册' }}
+          </a-button>
+        </a-space>
+      </a-form>
+    </a-tab-pane>
+  </a-tabs>
 </template>
 
 <script setup>
@@ -86,7 +195,7 @@
   });
 
   const { loading, setLoading } = useLoading();
-  const handleSubmit = async ({ errors, values }) => {
+  const loginHandleSubmit = async ({ errors, values }) => {
     if (loading.value) return;
     if (!errors) {
       setLoading(true);
@@ -116,7 +225,40 @@
   const setRememberPassword = (value) => {
     loginConfig.value.rememberPassword = value;
   };
+
+  const isRegister = ref(true);
+
+  const registerInfo = reactive({
+    account: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+  });
+  const registerHandleSubmit = async ({ errors, values }) => {
+    if (loading.value) return;
+    if (!errors) {
+      setLoading(true);
+      try {
+        await userStore.register(values);
+        window.console.log(errors, values);
+        Message.success('注册成功');
+      } catch (err) {
+        errorMessage.value = err.message;
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 </script>
+
+<!-- <style lang="less">
+  .arco-tabs-nav-tab-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+</style> -->
 
 <style lang="less" scoped>
   .login-form {

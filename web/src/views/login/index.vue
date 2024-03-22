@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <LoginIcon/>
+    <LoginIcon />
     <LoginBanner />
     <div class="content">
       <div class="content-inner">
@@ -49,11 +49,11 @@
 </style>
 
 <style lang="less" scoped>
-@media (max-width: 992px) {
-  .container {
-    .banner {
-      width: 25%;
+  @media (max-width: 992px) {
+    .container {
+      .banner {
+        width: 25%;
+      }
     }
   }
-}
 </style>
